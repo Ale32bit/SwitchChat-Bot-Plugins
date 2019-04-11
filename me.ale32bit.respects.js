@@ -27,6 +27,10 @@ class Respects extends BotPlugin {
             return m.replace("&", "§")
         }
 
+        let save = () => {
+            fs.writeFileSync(path.resolve(this.configPath, "players.json"), JSON.stringify(this.respects));
+        };
+
         this.lastDeath = null;
         this.alreadyPaid = [];
         this.triggerRegex = /^[f]$/i;
@@ -51,6 +55,7 @@ class Respects extends BotPlugin {
                     this.alreadyPaid.push(message.player.username);
                     if (!this.respects[this.lastDeath.uuid]) this.respects[this.lastDeath.uuid] = 0;
                     this.respects[this.lastDeath.uuid]++;
+                    save();
                     this.lastDeath.tell(cc(`&a${message.player} &6paid you respects!`), "Respects", "format");
                     message.player.tell(cc(`&6You paid &a${this.lastDeath} &6respects!`), "Respects", "format");
                 }
